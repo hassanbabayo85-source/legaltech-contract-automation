@@ -6,7 +6,9 @@
 //!
 //! Override at build time:
 //!
-//!     API_BASE_URL=https://api.lexhack.example.com trunk build --release
+//! ```bash
+//! API_BASE_URL=https://api.lexhack.example.com trunk build --release
+//! ```
 //!
 //! Defaults to `http://localhost:3000`, which matches the backend's
 //! default `PORT=3000` in development.

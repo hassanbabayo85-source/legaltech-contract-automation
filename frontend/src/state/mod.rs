@@ -7,3 +7,6 @@ pub mod toasts;
 pub use toasts::{provide_toasts, use_toasts, ToastHost};
 
 pub mod theme;
+
+#[cfg(test)]
+mod tests;
