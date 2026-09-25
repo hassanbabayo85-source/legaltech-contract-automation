@@ -1,0 +1,13 @@
+# =============================================================================
+# Project-local cargo configuration.
+# =============================================================================
+# This project lives on an external drive which occasionally produces
+# corrupt incremental-compilation artifacts. Disable incremental
+# compilation entirely to avoid ICEs ("Invalid DepKind") and misleading
+# "can't find crate" errors.
+#
+# Trade-off: builds are slightly slower on the first run, but reliable.
+# =============================================================================
+
+[build]
+incremental = false
