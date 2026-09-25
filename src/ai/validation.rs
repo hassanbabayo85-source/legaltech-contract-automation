@@ -237,8 +237,8 @@ pub fn evidence_matches_contract(evidence: &str, contract_text: &str) -> bool {
     }
     let c_tokens: std::collections::HashSet<&str> = c.split_whitespace().collect();
     let matching = e_tokens.iter().filter(|t| c_tokens.contains(*t)).count();
-    // ceil(len * 0.7) = (len * 7 + 9) / 10.
-    let threshold = (e_tokens.len() * 7 + 9) / 10;
+    // ceil(len * 0.7): multiply first to stay in integer arithmetic.
+    let threshold = e_tokens.len().saturating_mul(7).div_ceil(10);
     matching >= threshold
 }
 
@@ -266,10 +266,7 @@ pub fn verify_risk_evidence(
 
 /// Returns the fraction (0..=100) of quote-type risks whose evidence was
 /// found in the contract. 100 when there are no quote risks.
-pub fn evidence_verification_score(
-    analysis: &ValidatedAnalysis,
-    contract_text: &str,
-) -> i32 {
+pub fn evidence_verification_score(analysis: &ValidatedAnalysis, contract_text: &str) -> i32 {
     let total = analysis.risks.len();
     if total == 0 {
         return 100;

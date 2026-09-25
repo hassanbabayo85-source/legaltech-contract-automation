@@ -196,10 +196,7 @@ impl ApiClient {
     /// Uploads an image (JPEG, PNG, WebP) to
     /// `POST /api/contracts/extract-image` and returns the extracted
     /// text. Uses the same multipart pattern as `extract_text_from_pdf`.
-    pub async fn extract_text_from_image(
-        &self,
-        file: web_sys::File,
-    ) -> Result<String, ApiError> {
+    pub async fn extract_text_from_image(&self, file: web_sys::File) -> Result<String, ApiError> {
         let url = self.url("/api/contracts/extract-image");
 
         let form = web_sys::FormData::new()
@@ -211,8 +208,8 @@ impl ApiClient {
         opts.set_method("POST");
         opts.set_body(&form);
         if let Some(token) = self.token() {
-            let headers = web_sys::Headers::new()
-                .map_err(|_| ApiError::Network("headers".into()))?;
+            let headers =
+                web_sys::Headers::new().map_err(|_| ApiError::Network("headers".into()))?;
             headers
                 .set("Authorization", &format!("Bearer {token}"))
                 .map_err(|_| ApiError::Network("auth header".into()))?;
@@ -222,13 +219,10 @@ impl ApiClient {
         let request = web_sys::Request::new_with_str_and_init(&url, &opts)
             .map_err(|_| ApiError::Network("could not build request".into()))?;
 
-        let window = web_sys::window()
-            .ok_or_else(|| ApiError::Network("no window".into()))?;
-        let resp_value = wasm_bindgen_futures::JsFuture::from(
-            window.fetch_with_request(&request),
-        )
-        .await
-        .map_err(|_| ApiError::Network("network error".into()))?;
+        let window = web_sys::window().ok_or_else(|| ApiError::Network("no window".into()))?;
+        let resp_value = wasm_bindgen_futures::JsFuture::from(window.fetch_with_request(&request))
+            .await
+            .map_err(|_| ApiError::Network("network error".into()))?;
 
         let resp: web_sys::Response = resp_value
             .dyn_into()
@@ -237,8 +231,7 @@ impl ApiClient {
         let status = resp.status();
         if !(200..300).contains(&status) {
             let body = wasm_bindgen_futures::JsFuture::from(
-                resp.json()
-                    .map_err(|_| ApiError::Network("body".into()))?,
+                resp.json().map_err(|_| ApiError::Network("body".into()))?,
             )
             .await
             .ok()
@@ -249,8 +242,7 @@ impl ApiClient {
         }
 
         let json_value = wasm_bindgen_futures::JsFuture::from(
-            resp.json()
-                .map_err(|_| ApiError::Network("json".into()))?,
+            resp.json().map_err(|_| ApiError::Network("json".into()))?,
         )
         .await
         .map_err(|_| ApiError::Network("json parse".into()))?;
@@ -285,8 +277,8 @@ impl ApiClient {
         if let Some(token) = self.token() {
             // Build headers with the auth token. We do not set
             // Content-Type — the browser must add the multipart boundary.
-            let headers = web_sys::Headers::new()
-                .map_err(|_| ApiError::Network("headers".into()))?;
+            let headers =
+                web_sys::Headers::new().map_err(|_| ApiError::Network("headers".into()))?;
             headers
                 .set("Authorization", &format!("Bearer {token}"))
                 .map_err(|_| ApiError::Network("auth header".into()))?;
@@ -296,8 +288,7 @@ impl ApiClient {
         let request = web_sys::Request::new_with_str_and_init(&url, &opts)
             .map_err(|_| ApiError::Network("could not build request".into()))?;
 
-        let window = web_sys::window()
-            .ok_or_else(|| ApiError::Network("no window".into()))?;
+        let window = web_sys::window().ok_or_else(|| ApiError::Network("no window".into()))?;
         let resp_value = wasm_bindgen_futures::JsFuture::from(window.fetch_with_request(&request))
             .await
             .map_err(|_| ApiError::Network("network error".into()))?;
@@ -313,7 +304,9 @@ impl ApiClient {
             )
             .await
             .ok()
-            .and_then(|v| serde_wasm_bindgen::from_value::<crate::api::error::ApiErrorBody>(v).ok());
+            .and_then(|v| {
+                serde_wasm_bindgen::from_value::<crate::api::error::ApiErrorBody>(v).ok()
+            });
             return Err(ApiError::from_status(status as u16, body, None));
         }
 

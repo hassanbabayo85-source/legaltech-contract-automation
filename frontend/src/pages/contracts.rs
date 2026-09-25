@@ -11,8 +11,7 @@ use crate::api::ApiError;
 use crate::auth::context::use_auth;
 use crate::components::icons::{IconContracts, IconPlus, IconSearch, IconTrash};
 use crate::components::{
-    AppShell, ConfirmDialog, EmptyState, ErrorState, ListSkeleton, RiskBadge, SafeText,
-    StatusBadge,
+    AppShell, ConfirmDialog, EmptyState, ErrorState, ListSkeleton, RiskBadge, SafeText, StatusBadge,
 };
 use crate::state::use_toasts;
 
@@ -231,7 +230,7 @@ pub fn ContractsPage() -> impl IntoView {
                         })
                         .collect();
                     // Preserve backend sort (created_at desc).
-                    filtered.sort_by(|a, b| b.created_at.cmp(&a.created_at));
+                    filtered.sort_by_key(|c| std::cmp::Reverse(c.created_at));
 
                     let count_active = filtered
                         .iter()
@@ -248,7 +247,7 @@ pub fn ContractsPage() -> impl IntoView {
 
                     let filtered_total = filtered.len();
                     let current_page = page.get();
-                    let last_page = ((filtered_total + CLIENT_PAGE_SIZE - 1) / CLIENT_PAGE_SIZE).max(1) as u32;
+                    let last_page = filtered_total.div_ceil(CLIENT_PAGE_SIZE).max(1) as u32;
                     let current_page = current_page.min(last_page).max(1);
                     let start = ((current_page - 1) as usize) * CLIENT_PAGE_SIZE;
                     let end = (start + CLIENT_PAGE_SIZE).min(filtered_total);
@@ -371,7 +370,8 @@ fn IfEmptyOrTable(
                 <div class="empty-title">"No contracts match your filters"</div>
                 <div class="empty-desc">"Try a different search term or filter."</div>
             </div>
-        }.into_any()
+        }
+        .into_any()
     } else {
         view! {
             <div class="data-table-wrap">
@@ -393,7 +393,8 @@ fn IfEmptyOrTable(
                     </tbody>
                 </table>
             </div>
-        }.into_any()
+        }
+        .into_any()
     }
 }
 

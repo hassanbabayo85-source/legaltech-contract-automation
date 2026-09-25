@@ -5,7 +5,9 @@ use leptos_router::hooks::use_navigate;
 
 use crate::api::models::RegisterRequest;
 use crate::auth::context::use_auth;
-use crate::components::icons::{IconBolt, IconChannels, IconClock, IconEye, IconEyeOff, IconShield};
+use crate::components::icons::{
+    IconBolt, IconChannels, IconClock, IconEye, IconEyeOff, IconShield,
+};
 use crate::components::Spinner;
 use crate::state::use_toasts;
 

@@ -155,7 +155,8 @@ pub async fn analyze_contract(
 
     // Compute and log a verification score (0..=100). Persisting it
     // requires a schema column that is not present in this build.
-    let verification_score = validation::evidence_verification_score(&validated, &contract.raw_text);
+    let verification_score =
+        validation::evidence_verification_score(&validated, &contract.raw_text);
 
     tracing::info!(
         user_id = %user_id,

@@ -37,8 +37,6 @@ pub fn ContractNewPage() -> impl IntoView {
     // ---- PDF upload ---------------------------------------------------------
 
     let on_pdf_change = {
-        let auth = auth;
-        let toasts = toasts;
         move |ev: web_sys::Event| {
             let Some(input) = ev
                 .target()
@@ -89,8 +87,6 @@ pub fn ContractNewPage() -> impl IntoView {
     // ---- Image upload -------------------------------------------------------
 
     let on_image_change = {
-        let auth = auth;
-        let toasts = toasts;
         move |ev: web_sys::Event| {
             let Some(input) = ev
                 .target()
@@ -174,8 +170,6 @@ pub fn ContractNewPage() -> impl IntoView {
             error.set(None);
             submitting.set(true);
 
-            let auth = auth;
-            let toasts = toasts;
             let navigate = navigate.clone();
 
             leptos::task::spawn_local(async move {
@@ -260,16 +254,16 @@ pub fn ContractNewPage() -> impl IntoView {
                             <div class="upload-zone-body">
                                 <div class="upload-zone-title">"PDF"</div>
                                 <div class=move || {
-                                    if uploading.get() && upload_name.get().as_deref().map_or(false, |n| n.to_lowercase().ends_with(".pdf")) {
+                                    if uploading.get() && upload_name.get().as_deref().is_some_and(|n| n.to_lowercase().ends_with(".pdf")) {
                                         "upload-zone-hint is-loading"
-                                    } else if upload_name.get().as_deref().map_or(false, |n| n.to_lowercase().ends_with(".pdf")) {
+                                    } else if upload_name.get().as_deref().is_some_and(|n| n.to_lowercase().ends_with(".pdf")) {
                                         "upload-zone-hint is-loaded"
                                     } else {
                                         "upload-zone-hint"
                                     }
                                 }>
                                     {move || {
-                                        if uploading.get() && upload_name.get().as_deref().map_or(false, |n| n.to_lowercase().ends_with(".pdf")) {
+                                        if uploading.get() && upload_name.get().as_deref().is_some_and(|n| n.to_lowercase().ends_with(".pdf")) {
                                             "Extracting text…".to_string()
                                         } else if let Some(n) = upload_name.get() {
                                             if n.to_lowercase().ends_with(".pdf") {
@@ -314,7 +308,7 @@ pub fn ContractNewPage() -> impl IntoView {
                             <div class="upload-zone-body">
                                 <div class="upload-zone-title">"Image"</div>
                                 <div class=move || {
-                                    let is_img = upload_name.get().as_deref().map_or(false, |n| {
+                                    let is_img = upload_name.get().as_deref().is_some_and(|n| {
                                         let l = n.to_lowercase();
                                         l.ends_with(".jpg") || l.ends_with(".jpeg") || l.ends_with(".png") || l.ends_with(".webp")
                                     });
@@ -327,7 +321,7 @@ pub fn ContractNewPage() -> impl IntoView {
                                     }
                                 }>
                                     {move || {
-                                        let is_img = upload_name.get().as_deref().map_or(false, |n| {
+                                        let is_img = upload_name.get().as_deref().is_some_and(|n| {
                                             let l = n.to_lowercase();
                                             l.ends_with(".jpg") || l.ends_with(".jpeg") || l.ends_with(".png") || l.ends_with(".webp")
                                         });

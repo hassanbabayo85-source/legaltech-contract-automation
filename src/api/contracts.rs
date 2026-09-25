@@ -511,15 +511,13 @@ pub async fn extract_text(
         }
     }
 
-    let bytes = pdf_bytes
-        .ok_or_else(|| AppError::Validation("missing `file` field".to_string()))?;
+    let bytes =
+        pdf_bytes.ok_or_else(|| AppError::Validation("missing `file` field".to_string()))?;
 
     let text = crate::services::pdf::extract_text(&bytes).map_err(|e| {
         use crate::services::pdf::PdfError;
         match e {
-            PdfError::Unreadable => {
-                AppError::Validation("file is not a valid PDF".to_string())
-            }
+            PdfError::Unreadable => AppError::Validation("file is not a valid PDF".to_string()),
             PdfError::Encrypted => AppError::Validation(
                 "PDF is password-protected; please remove the password first".to_string(),
             ),
@@ -528,9 +526,7 @@ pub async fn extract_text(
                  copy the text manually instead"
                     .to_string(),
             ),
-            PdfError::Other => {
-                AppError::Validation("could not extract text from PDF".to_string())
-            }
+            PdfError::Other => AppError::Validation("could not extract text from PDF".to_string()),
         }
     })?;
 
@@ -561,9 +557,7 @@ pub async fn extract_image(
     let api_key = config
         .ai_api_key
         .as_deref()
-        .ok_or_else(|| {
-            AppError::ExternalService("AI provider is not configured".to_string())
-        })?
+        .ok_or_else(|| AppError::ExternalService("AI provider is not configured".to_string()))?
         .to_string();
 
     let mut image_bytes: Option<Vec<u8>> = None;
@@ -583,8 +577,8 @@ pub async fn extract_image(
             image_bytes = Some(data.to_vec());
         }
     }
-    let bytes = image_bytes
-        .ok_or_else(|| AppError::Validation("missing `file` field".to_string()))?;
+    let bytes =
+        image_bytes.ok_or_else(|| AppError::Validation("missing `file` field".to_string()))?;
 
     // Build a dedicated client with a generous timeout: vision calls
     // are slower than text-only calls.
@@ -592,35 +586,29 @@ pub async fn extract_image(
         .timeout(std::time::Duration::from_secs(120))
         .redirect(reqwest::redirect::Policy::none())
         .build()
-        .map_err(|_| {
-            AppError::ExternalService("could not build http client".to_string())
-        })?;
+        .map_err(|_| AppError::ExternalService("could not build http client".to_string()))?;
 
-    let text = crate::services::vision::extract_text(
-        &client,
-        &config.ai_base_url,
-        &api_key,
-        &bytes,
-    )
-    .await
-    .map_err(|e| {
-        use crate::services::vision::VisionError;
-        match e {
-            VisionError::UnsupportedFormat => AppError::Validation(
-                "image format not supported (use JPEG, PNG, or WebP)".to_string(),
-            ),
-            VisionError::TooLarge => AppError::PayloadTooLarge,
-            VisionError::NotConfigured => {
-                AppError::ExternalService("AI vision is not configured".to_string())
-            }
-            VisionError::NoText => AppError::Validation(
-                "no readable text found in the image; try a clearer photo".to_string(),
-            ),
-            VisionError::RequestFailed | VisionError::ProviderError => {
-                AppError::ExternalService("vision provider error".to_string())
-            }
-        }
-    })?;
+    let text =
+        crate::services::vision::extract_text(&client, &config.ai_base_url, &api_key, &bytes)
+            .await
+            .map_err(|e| {
+                use crate::services::vision::VisionError;
+                match e {
+                    VisionError::UnsupportedFormat => AppError::Validation(
+                        "image format not supported (use JPEG, PNG, or WebP)".to_string(),
+                    ),
+                    VisionError::TooLarge => AppError::PayloadTooLarge,
+                    VisionError::NotConfigured => {
+                        AppError::ExternalService("AI vision is not configured".to_string())
+                    }
+                    VisionError::NoText => AppError::Validation(
+                        "no readable text found in the image; try a clearer photo".to_string(),
+                    ),
+                    VisionError::RequestFailed | VisionError::ProviderError => {
+                        AppError::ExternalService("vision provider error".to_string())
+                    }
+                }
+            })?;
 
     Ok(Json(ExtractTextResponse { text }))
 }

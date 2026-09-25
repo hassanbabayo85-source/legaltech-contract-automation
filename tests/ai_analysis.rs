@@ -83,7 +83,7 @@ fn valid_analysis() -> AiAnalysis {
             description: "Renews automatically".to_string(),
             risk_level: "high".to_string(),
             risk_score: 75,
-            evidence: "Clause 4.2: This agreement shall renew automatically...".to_string(),
+            evidence: "Clause 4.2: This agreement shall renew automatically".to_string(),
         }],
         obligations: vec![AiObligation {
             title: "Payment due".to_string(),
@@ -161,12 +161,19 @@ async fn register(app: &Router, email: &str) -> String {
 }
 
 async fn create_contract(app: &Router, token: &str) -> Uuid {
+    // The raw_text must contain the exact evidence used by
+    // `valid_analysis()` so that `verify_risk_evidence()` accepts it.
+    let raw_text = "The parties agree to a 2026 term. \
+                    Clause 4.2: This agreement shall renew automatically \
+                    for successive 12-month periods unless either party \
+                    provides 60 days written notice of non-renewal. \
+                    Payment is due within 30 days of invoice receipt.";
     let r = app
         .clone()
         .oneshot(request(
             "POST",
             "/api/contracts",
-            Some(json!({"title": "T", "raw_text": "The parties agree to a 2026 term."})),
+            Some(json!({"title": "T", "raw_text": raw_text})),
             Some(token),
         ))
         .await
@@ -481,7 +488,10 @@ async fn failed_analysis_does_not_complete(pool: PgPool) {
 
 #[sqlx::test(migrations = "./migrations")]
 async fn failed_then_retry_can_succeed(pool: PgPool) {
-    let p = MockProvider::script(vec![Err(AiError::Permanent { status: 400 }), Ok(valid_analysis())]);
+    let p = MockProvider::script(vec![
+        Err(AiError::Permanent { status: 400 }),
+        Ok(valid_analysis()),
+    ]);
     let app = app(pool.clone(), p);
     let t = register(&app, "a@example.com").await;
     let cid = create_contract(&app, &t).await;

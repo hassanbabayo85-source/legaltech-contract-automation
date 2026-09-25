@@ -107,11 +107,7 @@ pub async fn extract_text(
     }
     let format = detect_format(image_bytes).ok_or(VisionError::UnsupportedFormat)?;
 
-    let data_url = format!(
-        "data:{};base64,{}",
-        format.mime(),
-        B64.encode(image_bytes)
-    );
+    let data_url = format!("data:{};base64,{}", format.mime(), B64.encode(image_bytes));
 
     let url = build_chat_url(base_url);
     let body = json!({
@@ -139,10 +135,7 @@ pub async fn extract_text(
         return Err(VisionError::ProviderError);
     }
 
-    let parsed: serde_json::Value = resp
-        .json()
-        .await
-        .map_err(|_| VisionError::ProviderError)?;
+    let parsed: serde_json::Value = resp.json().await.map_err(|_| VisionError::ProviderError)?;
 
     // Some reasoning models place their output in a `reasoning` field
     // and leave `content` empty. Prefer `content`; fall back to

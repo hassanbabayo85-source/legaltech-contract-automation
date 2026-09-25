@@ -53,4 +53,3 @@ pub async fn recover_stale_analyses(
 ) -> Result<u64, sqlx::Error> {
     crate::db::contracts::recover_stale_pending_analyses(pool, stale_seconds).await
 }
-

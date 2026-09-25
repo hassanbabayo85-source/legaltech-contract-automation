@@ -134,7 +134,11 @@ mod tests {
 
     #[tokio::test]
     async fn http_scheme_blocked() {
-        let ch = WebhookChannel::new(Some("http://example.com/hook".into()), std::time::Duration::from_secs(5), false);
+        let ch = WebhookChannel::new(
+            Some("http://example.com/hook".into()),
+            std::time::Duration::from_secs(5),
+            false,
+        );
         let err = ch.send(&n()).await.unwrap_err();
         assert_eq!(err.safe_category(), "ssrf_blocked");
     }
@@ -194,7 +198,10 @@ mod tests {
             .build()
             .expect("plain client builds");
 
-        let result = client.get("http://pinned-client.invalid:9/probe").send().await;
+        let result = client
+            .get("http://pinned-client.invalid:9/probe")
+            .send()
+            .await;
         assert!(
             result.is_err(),
             "a plain reqwest client must fail to resolve `.invalid` — this is why pinning is required"

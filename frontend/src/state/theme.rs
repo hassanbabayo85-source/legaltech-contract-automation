@@ -54,7 +54,9 @@ pub fn current() -> Theme {
 pub fn set(theme: Theme) {
     let Some(win) = web_sys::window() else { return };
     let Some(doc) = win.document() else { return };
-    let Some(html) = doc.document_element() else { return };
+    let Some(html) = doc.document_element() else {
+        return;
+    };
     let _ = html.set_attribute("data-theme", theme.as_str());
     if let Ok(Some(storage)) = win.local_storage() {
         let _ = storage.set_item(STORAGE_KEY, theme.as_str());

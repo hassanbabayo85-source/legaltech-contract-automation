@@ -342,7 +342,11 @@ impl ChannelRegistry {
         Self::new(
             Box::new(TelegramChannel::new(Client::new(), None, None)),
             Box::new(DiscordChannel::new(Client::new(), None)),
-            Box::new(WebhookChannel::new(None, std::time::Duration::from_secs(5), false)),
+            Box::new(WebhookChannel::new(
+                None,
+                std::time::Duration::from_secs(5),
+                false,
+            )),
         )
     }
 }

@@ -48,13 +48,13 @@ pub fn AppShell(children: Children) -> impl IntoView {
             view! { <IconMoon /> }.into_any()
         }
     };
-    let theme_label = move || {
+    let theme_label = Signal::derive(move || {
         if theme_signal.get() == Theme::Dark {
             "Light mode"
         } else {
             "Dark mode"
         }
-    };
+    });
 
     view! {
         <div class="app-shell">
@@ -86,8 +86,8 @@ pub fn AppShell(children: Children) -> impl IntoView {
                         class="btn btn-ghost btn-sm"
                         type="button"
                         on:click=on_toggle_theme
-                        aria-label=move || theme_label()
-                        title=move || theme_label()
+                        aria-label=theme_label
+                        title=theme_label
                     >
                         {theme_icon}
                         <span>{theme_label}</span>

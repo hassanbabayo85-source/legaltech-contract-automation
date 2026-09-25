@@ -276,12 +276,7 @@ fn ContractHeader(
     on_edit_request: Callback<()>,
 ) -> impl IntoView {
     let title = contract.title.clone();
-    let id_short = contract
-        .id
-        .to_string()
-        .chars()
-        .take(8)
-        .collect::<String>();
+    let id_short = contract.id.to_string().chars().take(8).collect::<String>();
     let status = contract.analysis_status.clone();
     let risk_level = contract.risk_level.clone();
     let risk_score = contract.risk_score;
@@ -363,7 +358,7 @@ fn ContractHeader(
                         {risk_score
                             .map(|s| format!("{s}/100"))
                             .unwrap_or_else(|| {
-                                if status.to_ascii_lowercase() == "completed" {
+                                if status.eq_ignore_ascii_case("completed") {
                                     "0/100".to_string()
                                 } else {
                                     "—".to_string()
@@ -418,11 +413,7 @@ fn ContractHeader(
 // =========================================================================
 
 #[component]
-fn AnalysisPrompt(
-    status: String,
-    contract_id: Uuid,
-    on_reload: Callback<()>,
-) -> impl IntoView {
+fn AnalysisPrompt(status: String, contract_id: Uuid, on_reload: Callback<()>) -> impl IntoView {
     let auth = use_auth();
     let toasts = use_toasts();
     let is_running = RwSignal::new(false);
@@ -522,11 +513,7 @@ fn AnalysisPrompt(
 // =========================================================================
 
 #[component]
-fn Tabs(
-    tab: RwSignal<ActiveTab>,
-    risks_count: usize,
-    obligations_count: usize,
-) -> impl IntoView {
+fn Tabs(tab: RwSignal<ActiveTab>, risks_count: usize, obligations_count: usize) -> impl IntoView {
     let make_class = move |value: ActiveTab| {
         if tab.get() == value {
             "tab tab-active"
@@ -621,7 +608,7 @@ fn SummaryTab(analysis: AnalysisResponse, raw_text: String) -> impl IntoView {
                 </div>
             }.into_any()
         } else {
-            view! { <></> }.into_any()
+            ().into_any()
         }}
 
         <RawTextSection raw_text=raw_text />
@@ -637,9 +624,7 @@ fn risk_donut(score: i32, level: &Option<String>) -> String {
         _ => "var(--c-fg-subtle)",
     };
     let pct = score.clamp(0, 100);
-    format!(
-        "background: conic-gradient({color} 0% {pct}%, var(--c-surface-alt) {pct}% 100%);"
-    )
+    format!("background: conic-gradient({color} 0% {pct}%, var(--c-surface-alt) {pct}% 100%);")
 }
 
 #[component]
@@ -686,6 +671,9 @@ fn ObligationsTab(analysis: AnalysisResponse) -> impl IntoView {
 // =========================================================================
 
 #[component]
-fn RemindersTab(contract_id: Uuid, obligations: Vec<crate::api::models::ObligationItem>) -> impl IntoView {
+fn RemindersTab(
+    contract_id: Uuid,
+    obligations: Vec<crate::api::models::ObligationItem>,
+) -> impl IntoView {
     view! { <RemindersSection contract_id=contract_id obligations=obligations /> }
 }
