@@ -1,0 +1,65 @@
+[package]
+name = "lexhack-frontend"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Leptos CSR frontend for LexHack"
+
+[dependencies]
+# --- Leptos core ---
+leptos = { version = "0.7", features = ["csr"] }
+leptos_router = "0.7"  # CSR is the default; `ssr` is the opt-in feature
+
+# --- Browser / WASM ---
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+gloo-net = { version = "0.6", features = ["http"] }
+gloo-timers = { version = "0.3", features = ["futures"] }
+console_error_panic_hook = "0.1"
+js-sys = "0.3"
+web-sys = { version = "0.3", features = [
+    "Window",
+    "Document",
+    "Element",
+    "HtmlElement",
+    "HtmlDialogElement",
+    "Storage",
+    "Location",
+    "Navigator",
+    "HtmlInputElement",
+    "HtmlTextAreaElement",
+    "HtmlSelectElement",
+    "HtmlFormElement",
+    "Event",
+    "InputEvent",
+    "SubmitEvent",
+    "KeyboardEvent",
+    "File",
+    "FileList",
+    "Blob",
+    "FormData",
+    "Request",
+    "RequestInit",
+    "RequestMode",
+    "Response",
+    "Headers",
+] }
+
+# --- Data / serialization ---
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde-wasm-bindgen = "0.6"
+uuid = { version = "1", features = ["v4", "serde", "js"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# --- Logging ---
+tracing = "0.1"
+tracing-wasm = "0.2"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
+
+# The workspace-wide resolver is 2; declaring it here keeps individual
+# `cargo build` inside frontend/ happy.
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false

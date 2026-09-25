@@ -1,0 +1,27 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+/target/
+/frontend/target/
+/frontend/dist/
+
+# NOTE: Cargo.lock is intentionally NOT ignored — this is a binary
+# application, and applications should commit their lockfile for
+# reproducible builds.
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc generated
+*.log
+*.pdb
+*.bak

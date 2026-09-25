@@ -1,0 +1,54 @@
+[workspace]
+members = [".", "frontend"]
+default-members = ["."]
+resolver = "2"
+
+[package]
+name = "lexhack-backend"
+version = "0.1.0"
+edition = "2021"
+description = "AI-Powered Legal Risk & Deadline Dispatcher - backend"
+publish = false
+
+[dependencies]
+axum = { version = "0.7", features = ["multipart"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal", "net", "time", "sync"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+
+# PDF text extraction (pure Rust, no system deps)
+pdf-extract = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["trace", "timeout", "set-header", "cors", "fs"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sqlx = { version = "0.8", features = [
+    "runtime-tokio-rustls",
+    "postgres",
+    "uuid",
+    "chrono",
+    "macros",
+    "migrate",
+    "json",
+] }
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+dotenvy = "0.15"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+thiserror = "1"
+anyhow = "1"
+argon2 = { version = "0.5", features = ["std"] }
+rand = "0.8"
+sha2 = "0.10"
+base64 = "0.22"
+hex = "0.4"
+async-trait = "0.1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+url = "2"
+chacha20poly1305 = "0.10"
+futures = "0.3"
+
+[dev-dependencies]
+tower = { version = "0.4", features = ["util"] }
+http-body-util = "0.1"
+wiremock = "0.6"

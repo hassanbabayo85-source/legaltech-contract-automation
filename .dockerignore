@@ -1,0 +1,25 @@
+# Build artifacts
+target/
+frontend/target/
+frontend/dist/
+
+# Version control
+.git/
+.gitignore
+
+# Local environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local docs / scratch
+docs/scratch/
+*.md.bak
