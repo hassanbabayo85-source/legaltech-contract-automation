@@ -201,10 +201,10 @@ The Compose stack runs PostgreSQL, applies migrations via the
 backend binary's `--migrate` mode, and starts the app. Data persists
 in the `lexhack_pgdata` volume.
 
-> **Note:** The Docker build was **not** exercised in the development
-> environment used for this build (limited data budget). The Compose
-> configuration and Dockerfile were statically reviewed, and
-> `docker compose config` parses cleanly. Do not assume the image
+> **Note:** The Docker build and full `docker compose up` stack were
+> verified end-to-end on the development machine — migrations apply
+> cleanly and the app serves both the API and frontend static files
+> on `:3000`.
 > builds without a first successful local run.
 
 ## Testing
@@ -212,7 +212,7 @@ in the `lexhack_pgdata` volume.
 Backend:
 
     export DATABASE_URL="postgres://lexhack:lexhack_dev_pw@127.0.0.1:5432/lexhack_test"
-    cargo test --workspace --all-targets      # 324 tests
+    cargo test --workspace --all-targets      # 333 tests
     cargo clippy --workspace --all-targets --all-features -- -D warnings
     cargo fmt --all -- --check
 
