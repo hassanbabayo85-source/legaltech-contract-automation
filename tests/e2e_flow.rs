@@ -115,7 +115,7 @@ impl AiProvider for MockProvider {
                 description: "Contract renews automatically.".to_string(),
                 risk_level: "high".to_string(),
                 risk_score: 75,
-                evidence: "Clause 4.2: This agreement shall renew automatically...".to_string(),
+                evidence: "Clause 4.2: This agreement shall renew automatically".to_string(),
             }],
             obligations: vec![AiObligation {
                 title: "Payment due".to_string(),
@@ -193,7 +193,9 @@ async fn create_contract(app: &Router, token: &str) -> Uuid {
             "/api/contracts",
             Some(json!({
                 "title": "E2E Employment Agreement",
-                "raw_text": "This fictional agreement is used only for testing."
+                "raw_text": "This fictional agreement is used only for testing. \
+                              Clause 4.2: This agreement shall renew automatically \
+                              for successive 12-month periods."
             })),
             Some(token),
         ))
