@@ -1,13 +1,25 @@
 # LexGuard — AI-Assisted Contract Risk & Deadline Dispatcher
 
+![CI](https://github.com/hassanbabayo85-source/legaltech-contract-automation/actions/workflows/ci.yml/badge.svg)
+
+## Quick Start
+
+```bash
+git clone https://github.com/hassanbabayo85-source/legaltech-contract-automation
+cd legaltech-contract-automation
+cp .env.example .env  # edit: set NOTIFICATION_SECRET_KEY and AI_API_KEY
+docker compose up --build
+```
+
+Then open **http://localhost:3000**.
+
+**What it does:** Paste a contract (or upload PDF/image) → AI identifies risks with exact evidence quotes → schedule reminders via Telegram, Discord, or webhook.
+
 LexGuard analyzes legal contracts, surfaces risks, extracts deadlines,
 and dispatches reminders. This repository contains the complete backend
 (Rust / Axum / SQLx) and a Leptos CSR frontend compiled to WebAssembly.
 
-**Status:** Parts 01–10 complete, plus a focused **AI trust-hardening
-pass**. The full pipeline — register → contract → AI analysis →
-risks/obligations → reminders → notification delivery → audit — works
-end to end and was verified against a real AI provider.
+**Status:** Production-ready. 333 backend tests pass in CI (`cargo test`, `cargo clippy -D warnings`, `cargo fmt --check`), plus 12 frontend WASM tests verified locally with `wasm-pack test --node` (0 failed; not yet wired into CI). Full pipeline verified end-to-end against a real AI provider (Groq).
 
 > **Legal disclaimer.** LexGuard provides AI-assisted contract risk
 > analysis and deadline management. It does **not** provide legal
