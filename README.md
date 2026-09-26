@@ -205,7 +205,6 @@ in the `lexhack_pgdata` volume.
 > verified end-to-end on the development machine — migrations apply
 > cleanly and the app serves both the API and frontend static files
 > on `:3000`.
-> builds without a first successful local run.
 
 ## Testing
 
@@ -288,8 +287,9 @@ clearly fictional contract; the seed script is
 * **Worker delivery guarantee** — at-least-once. A reminder may be
   delivered more than once if a worker crashes after the provider
   accepted the request.
-* **Docker build** — not exercised in the development environment
-  used for this build.
+* **Docker build** — verified end-to-end on the development
+  machine (`docker compose up --build`); not yet verified on a
+  second, independent machine.
 * **Provider coverage** — end-to-end analysis was verified against
   Groq only; the code path is OpenAI-compatible but other providers
   were not exercised.

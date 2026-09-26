@@ -118,9 +118,9 @@ fi
 echo "  contract_id = $CONTRACT_ID"
 
 echo "→ Creating demo webhook channel…"
-# This URL will fail SSRF validation on purpose — the channel is created
-# so the demo can show the "Configured (encrypted)" indicator, but the
-# worker will never succeed in delivering to it. That is fine for a
+# This URL resolves to a public IP so it PASSES SSRF validation — the channel
+# is created so the demo can show "Configured (encrypted)", but the
+# worker fails with permanent_http_error (404) — this is expected and
 # demo; replace with a real URL for a real deployment.
 CHANNEL_BODY=$(curl -sS -X POST "$API_BASE/api/notification-channels" \
     -H "authorization: Bearer $TOKEN" \
