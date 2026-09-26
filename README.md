@@ -234,6 +234,7 @@ Frontend:
     cargo check --all-targets
     cargo clippy --all-targets --all-features -- -D warnings
     cargo check --target wasm32-unknown-unknown --all-targets
+    wasm-pack test --node                     # 12 tests, pure logic
     API_BASE_URL=http://localhost:3005 trunk build --release
 
 Integration tests use `#[sqlx::test]` and require a real PostgreSQL.
