@@ -329,7 +329,7 @@ Full model in `docs/SECURITY.md`. Highlights:
 
 ## Demo
 
-🎥 **[Full video walkthrough (2:58, with voiceover)](PASTE_YOUR_VIDEO_LINK_HERE)**
+🎥 **[Full video walkthrough (2:58, with voiceover)](https://vimeo.com/1230624693?fl=ip&fe=ec)**
 
 See `docs/DEMO.md` for a scripted walkthrough. The demo uses a
 clearly fictional contract; the seed script is
