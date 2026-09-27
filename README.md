@@ -2,6 +2,13 @@
 
 ![CI](https://github.com/hassanbabayo85-source/legaltech-contract-automation/actions/workflows/ci.yml/badge.svg)
 
+> **Note to judges:** This was built solo, in 8 days, working intensively
+> to ship a real working prototype rather than a slide-deck pitch. In the
+> interest of full transparency, please see
+> [`DEVELOPMENT_PROCESS.md`](DEVELOPMENT_PROCESS.md) for the exact
+> timeline and a disclosure of every AI tool used to build (not just
+> power) this project.
+
 ## Quick Start
 
 ```bash
@@ -28,6 +35,43 @@ and dispatches reminders. This repository contains the complete backend
 > **Read this before trusting any output:**
 > [`docs/KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md) — a blunt
 > list of what LexGuard cannot do and where its AI is unreliable.
+
+## Problem & Solution
+
+Missed contract deadlines and unnoticed risky clauses cost individuals
+and small businesses real money and legal exposure — most people
+signing contracts don't have a lawyer reviewing every line or tracking
+every deadline. LexGuard solves this by letting anyone upload a
+contract (text, PDF, or photo), automatically extracting risks,
+obligations, and deadlines using AI, and dispatching reminders before
+deadlines are missed — with every AI-identified risk backed by
+verified evidence quoted from the source contract, not free-standing
+claims.
+
+## Tech Stack
+
+* **Backend:** Rust, Axum, SQLx, PostgreSQL, Tokio.
+* **Frontend:** Rust, Leptos (CSR), compiled to WebAssembly via Trunk.
+* **AI (runtime, used by the app):** OpenAI-compatible chat completion
+  API — tested against Groq, OpenAI, and Gemini — for contract risk
+  analysis, plus a Groq vision model (Qwen 3.8) for image OCR.
+* **AI (development, used to build the app):** Gemini and DeepSeek for
+  coding assistance; Claude for code review and security-hardening
+  suggestions. Full disclosure in
+  [`DEVELOPMENT_PROCESS.md`](DEVELOPMENT_PROCESS.md).
+* **Security:** Argon2id, ChaCha20-Poly1305 (AEAD) for credentials at
+  rest, DNS-rebinding-safe SSRF protection.
+* **Infra:** Docker, Docker Compose, GitHub Actions CI.
+
+## Development Process & AI Disclosure
+
+Built solo in 8 days for LexHack 2026, working intensively (roughly
+12 hours a day during the core build phase) to deliver a complete,
+working system. Day 1 was spent entirely on planning and architecture
+before any code was written. The full day-by-day timeline and a
+detailed breakdown of every AI tool used during development — as
+distinct from the AI the application itself uses at runtime — is
+documented in [`DEVELOPMENT_PROCESS.md`](DEVELOPMENT_PROCESS.md).
 
 ## Architecture
 
@@ -63,7 +107,7 @@ See `docs/` for the design notes:
   appears in list responses.
 * **Contract input** — paste text, upload a **PDF** (text layer
   extracted server-side), or upload an **image** (JPEG / PNG / WebP,
-  OCR’d by a vision model).
+  OCR'd by a vision model).
 * **AI analysis** — OpenAI-compatible provider; server-side
   structural validation of every field; retries with bounded
   exponential backoff; timeouts; stale-result protection; **fuzzy
@@ -90,6 +134,7 @@ See `docs/` for the design notes:
     ├── Dockerfile               # multi-stage production image
     ├── docker-compose.yml       # local stack: postgres + migrate + app
     ├── .env.example             # every env var documented
+    ├── DEVELOPMENT_PROCESS.md   # timeline + AI tool disclosure
     ├── migrations/              # SQLx migrations, applied in order
     ├── scripts/seed_demo.sh     # demo data via the REST API
     ├── src/                     # backend source
