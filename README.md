@@ -1,6 +1,7 @@
 # LexGuard — AI-Assisted Contract Risk & Deadline Dispatcher
 
 ![CI](https://github.com/hassanbabayo85-source/legaltech-contract-automation/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 > **Note to judges:** This was built solo, in 8 days, working intensively
 > to ship a real working prototype rather than a slide-deck pitch. In the
@@ -26,7 +27,7 @@ LexGuard analyzes legal contracts, surfaces risks, extracts deadlines,
 and dispatches reminders. This repository contains the complete backend
 (Rust / Axum / SQLx) and a Leptos CSR frontend compiled to WebAssembly.
 
-**Status:** Production-ready. 333 backend tests pass in CI (`cargo test`, `cargo clippy -D warnings`, `cargo fmt --check`), plus 12 frontend WASM tests verified locally with `wasm-pack test --node` (0 failed; not yet wired into CI). Full pipeline verified end-to-end against a real AI provider (Groq).
+**Status:** Feature-complete hackathon prototype with production-grade security patterns. 333 backend tests pass in CI (`cargo test`, `cargo clippy -D warnings`, `cargo fmt --check`), plus 12 frontend WASM tests verified locally with `wasm-pack test --node` (0 failed; not yet wired into CI). Full pipeline verified end-to-end against a real AI provider (Groq). See "Known limitations" below for what is *not* yet production-hardened (e.g. single-instance rate limiting, no key rotation).
 
 > **Legal disclaimer.** LexGuard provides AI-assisted contract risk
 > analysis and deadline management. It does **not** provide legal
@@ -135,6 +136,7 @@ See `docs/` for the design notes:
     ├── docker-compose.yml       # local stack: postgres + migrate + app
     ├── .env.example             # every env var documented
     ├── DEVELOPMENT_PROCESS.md   # timeline + AI tool disclosure
+    ├── LICENSE                  # MIT
     ├── migrations/              # SQLx migrations, applied in order
     ├── scripts/seed_demo.sh     # demo data via the REST API
     ├── src/                     # backend source
@@ -365,3 +367,8 @@ clearly fictional contract; the seed script is
 
 The full, blunt list lives in
 [`docs/KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md).
+
+## License
+
+Released under the [MIT License](LICENSE) — see the `LICENSE` file
+for the full text.
