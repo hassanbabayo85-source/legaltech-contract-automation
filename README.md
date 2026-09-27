@@ -343,6 +343,7 @@ clearly fictional contract; the seed script is
 |---|---|
 | ![Sign in](docs/screenshots/01-login.png) <br> **Sign in** — bearer-token auth, no cookies. | ![AI risk analysis](docs/screenshots/02-ai-risk-analysis.png) <br> **AI risk analysis** — every risk backed by an exact evidence quote from the contract, not a free-standing claim. |
 | ![Dashboard](docs/screenshots/03-dashboard.png) <br> **Dashboard** — contracts, pending reminders, and delivery status at a glance. | ![Notification channels](docs/screenshots/04-notification-channels.png) <br> **Notification channels** — reminders delivered via Discord, Telegram, or a generic webhook. |
+| ![Contract detail](docs/screenshots/05-contract-detail-risk-score.png) <br> **Contract detail** — overall risk score (0–100), risk level, and the full source contract text with tabs for Risks, Obligations, and Reminders. | |
 
 ## Known limitations (short list)
 
